@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            font-family: 'Helvetica Neue', sans-serif;
+            margin: 0;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            background-color: #000;
+            align-items: center;
+            width:100%;
+            padding:1rem 0;
+        }
+
+        .logo {
+            margin:0 1rem;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.8em;
+        }
+
+        .links a {
+            color:#fff;
+            font-weight: bold; 
+            text-decoration: none;
+            font-size: 1.2em;
+            margin:0 1rem;
+        }
+
+        #container {
+            max-width: 100%;
+            margin: 0;
+            padding:1rem 0;
+        }
+
+        .blog-card:hover{
+            opacity:0.7;
+        }
+        .blog-list{
+            list-style: none;
+            padding:1rem 0; 
+            margin: 0; 
+        }
+        .blog-card {
+            
+            margin-bottom: 20px;
+        }
+
+        .blog-card img {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .item {
+            width: 20%;
+            float: left;
+            box-sizing: border-box;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" class="logo">Art United</a>
+        <div class="links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'explore' %}">Explore</a>
+            <a href="{% url 'create_blog' %}">Create Blog</a>
+            <a href="{% url 'user_artwork' username=request.user.username %}">My Art</a>
+            <a href="{% url 'index' %}">Logout</a>
+        </div>
+    </nav>
+    <div class="blog-container" id="container">
+        {% if blog_posts %}
+            <ul class="blog-list">
+                {% for blog_post in blog_posts %}
+                    <li class="blog-card item">
+                        {% if blog_post.image %}
+                        <a href="{% url 'show' blog_id=blog_post.id %}">
+                            <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }} Image">
+                        </a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No blog posts available.</p>
+        {% endif %}
+    </div>
+
+    <!-- <script src="/path/to/masonry.pkgd.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
+    <script>
+        var container = document.querySelector('#container');
+        var msnry = new Masonry(container, {
+            // options
+            columnWidth: '.item',
+            itemSelector: '.item'
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('/static/bg.jpg'); 
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            position: relative;
+        }
+
+        h1 {
+            color: #001B79;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-style: italic; 
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width:100%;
+            background-color: #001B79; 
+            padding: 20px 0px;
+        }
+
+        .logo {
+            margin-left: 20px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.8em;
+        }
+
+        .links {
+            margin-right: 20px; 
+        }
+
+        .links a {
+            color: #fff;
+            font-weight: bold; 
+            text-decoration: none;
+            font-size: 1.2em;
+            margin-left: 20px; 
+        }
+
+        .blog-container{
+            padding:20px;
+        }
+
+        .blog-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: center;
+        }
+
+        .blog-card {
+            flex: 0 0 calc(25% - 20px); 
+            background-color: #fff;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display:flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: #fff;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        a.read-more {
+            display: inline-block;
+            font-size: 1em;
+            text-decoration: none;
+            background-color: #3652AD;
+            color: #fff;
+            width:100%;
+            margin:0 auto;
+            padding:1rem 0;
+            text-align: center;
+        }
+
+        a:hover{
+            background-color: #001B79;
+        }
+
+        h2{
+            background-color: #001B79;
+            color:white;
+            width:100%;
+            margin: 0.1rem auto;
+            padding:1rem 0;
+            text-align: center;
+        }
+
+        img{
+            width:100%;
+            height:100%;
+        }
+
+        @media (max-width: 600px) {
+            .logo {
+                margin-left: 10px;
+            }
+            .links {
+                margin-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">Art United</a>
+        <div class="links">
+            <a href="{% url 'create_blog' %}">Create Blog</a>
+            <a href="{% url 'user_artwork' username=request.user.username %}">My Art</a>
+            <a href="{% url 'index' %}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="blog-container">
+        {% if blog_posts %}
+            <ul class="blog-list">
+                {% for blog_post in blog_posts %}
+                    <li class="blog-card">
+                        {% if blog_post.image %}
+                            <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }} Image">
+                        {% endif %}
+                        <h2>{{ blog_post.title }}</h2>
+                        <a class="read-more" href="{% url 'show' blog_id=blog_post.id %}">Read more</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No blog posts available.</p>
+        {% endif %}
+    </div>
+
+    
+</body>
+</html>  -->

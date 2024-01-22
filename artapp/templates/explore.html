@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            font-family: 'Helvetica Neue', sans-serif;
+            margin: 0;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            background-color: #000;
+            align-items: center;
+            width:100%;
+            padding:1rem 0;
+        }
+
+        .logo {
+            margin:0 1rem;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.8em;
+        }
+
+        .links a {
+            color:#fff;
+            font-weight: bold; 
+            text-decoration: none;
+            font-size: 1.2em;
+            margin:0 1rem;
+        }
+
+        #container {
+            max-width: 100%;
+            margin: 0;
+            padding:1rem 0;
+        }
+
+        .blog-card:hover{
+            opacity:0.7;
+        }
+        .blog-list{
+            list-style: none;
+            padding:1rem 0; 
+            margin: 0; 
+        }
+        .blog-card {
+            
+            margin-bottom: 20px;
+        }
+
+        .blog-card img {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .item {
+            width: 20%;
+            float: left;
+            box-sizing: border-box;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" class="logo">Art United</a>
+        <div class="links">
+            <a href="{% url 'home' %}">Home</a>
+            <a>Explore</a>
+            <a href="{% url 'create_blog' %}">Create Blog</a>
+            <a href="{% url 'user_artwork' username=request.user.username %}">My Art</a>
+            <a href="{% url 'index' %}">Logout</a>
+        </div>
+    </nav>
+    <h1> explore</h1>
+    <!-- <div class="blog-container" id="container">
+        {% if blog_posts %}
+            <ul class="blog-list">
+                {% for blog_post in blog_posts %}
+                    <li class="blog-card item">
+                        {% if blog_post.image %}
+                        <a href="{% url 'show' blog_id=blog_post.id %}">
+                            <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }} Image">
+                        </a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No blog posts available.</p>
+        {% endif %}
+    </div> -->
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
+    <script>
+        var container = document.querySelector('#container');
+        var msnry = new Masonry(container, {
+            // options
+            columnWidth: '.item',
+            itemSelector: '.item'
+        });
+    </script> -->
+</body>
+</html>

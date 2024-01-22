@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <title>{{ blog_post.title }}</title>
+
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            /* background-image: url('/static/bg.jpg');  */
+            /* background-size: cover;
+            background-position: center; */
+            margin: 0;
+            /* display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #E9F6FF;
+            color:#001B79; */
+        }
+
+        h1 {
+            color: #000;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width:100%;
+            background-color: #000; 
+            padding: 1rem 0;
+        }
+
+        .logo {
+            margin-left: 20px; 
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.8em;
+        }
+
+        .links {
+            margin-right: 20px; 
+        }
+
+        .links a {
+            color: #fff;
+            font-weight: bold; 
+            text-decoration: none;
+            font-size: 1.2em;
+            margin-left: 20px; 
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            width:70%;
+            margin: 3rem auto;
+            border-radius: 1rem;
+            border:2px solid #fff;
+            box-shadow: 0 0 10px rgba(169, 169, 169, 0.5);
+        }
+
+        img {
+            width: 100%;
+            height: 100%; 
+            margin:auto;
+            object-fit: cover;
+            display:grid;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .right-info {
+            padding:1rem;
+            display: flex;
+            flex-direction: column;
+            word-wrap: break-word;
+            text-align: left;
+            /* color: #001B79; */
+        }
+
+        h1{
+            margin:0 0 1rem 0;
+        }
+
+        p{
+            margin:0 0 1rem 0;
+        }
+
+        .left-info{
+            padding:1rem;
+        }
+
+        .comment-form {
+            display: none; 
+        }
+
+        #add-comment-btn {
+            background-color: #001B79;
+            color: #fff;
+            border-color: #000;
+            border-width: 2rem;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #like-btn{
+            background-color: #FF9BD2;
+            color:#fff;
+            border-color: #000;
+            border-width: 2rem;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #like-bth:hover{
+            background-color: #000
+        }
+
+        #add-comment-btn:hover {
+            background-color: #0044A3; 
+        }
+
+        .buttons{
+            display:grid;
+            grid-template-columns: 4fr 1fr;
+            margin: 0 0 1rem 0;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" class="logo">Art United</a>
+        <div class="links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'explore' %}">Explore</a>
+            <a href="{% url 'create_blog' %}">Create Blog</a>
+            <a href="{% url 'user_artwork' username=request.user.username %}">My Art</a>
+            <a href="{% url 'index' %}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="left-info">
+            {% if blog_post.image %}
+                <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }} Image">
+            {% endif %}
+        </div>
+        <div class="description right-info">
+            <h1>{{ blog_post.title }}</h1>
+            <p>{{ blog_post.content }}</p>
+            <p>By: {{ blog_post.author.username }}</p>
+            <p>Uploaded on: {{ blog_post.created_at }}</p>
+            <div class="buttons">
+                <button id="add-comment-btn" onclick="toggleCommentForm()">Add Comment</button>
+                <button id="like-btn">Like </button>
+            </div>
+            <div class="comment-form" id="comment-form">
+                <form method="post" action="{% url 'show' blog_post.id %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Post Comment</button>
+                </form>
+            </div>
+            
+            <div class="comments">
+                <h2>Comments</h2>
+                {% for comment in comments %}
+                    <p>{{ comment.author.username }} said: {{ comment.text }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="more-like-this">
+        <h2>More Like This</h2>
+        <div class="slick-carousel">
+            <!-- Add your carousel items here -->
+            {% for similar_post in similar_posts %}
+                <div class="carousel-item">
+                    {% if similar_post.image %}
+                        <img src="{{ similar_post.image.url }}" alt="{{ similar_post.title }} Image">
+                    {% endif %}
+                    <h3>{{ similar_post.title }}</h3>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script>
+        function toggleCommentForm() {
+            var commentForm = document.getElementById('comment-form');
+            commentForm.style.display = (commentForm.style.display === 'none') ? 'block' : 'none';
+        }
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $('.slick-carousel').slick({
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 2000,
+                arrows:true,
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!-- create_blog.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('/static/bg.jpg'); 
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        h1 {
+            color: #001B79;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-style: italic; 
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 60%;
+            max-width: 600px; /* Adjust as needed */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #001B79;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #001B79;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            align-items: center;
+            width:100%;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create a New Blog</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="{{ form.title.id_for_label }}">Title:</label>
+        {{ form.title }}
+
+        <label for="{{ form.category.id_for_label }}">Category:</label>
+        <select name="{{ form.category.name }}" id="{{ form.category.id_for_label }}">
+            {% for choice in form.category.field.choices %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="{{ form.content.id_for_label }}">Content:</label>
+        {{ form.content }}
+
+        <label for="{{ form.image.id_for_label }}">Image:</label>
+        {{ form.image }}
+
+        <button type="submit">Create Blog</button>
+    </form>
+</body>
+</html>
